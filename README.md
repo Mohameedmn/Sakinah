@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # sakinah
 
 A new Flutter project.
@@ -14,3 +15,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# Sakinah
+>>>>>>> 18704a492d99f1b76ddb91e84f2f6ba245113b8b
