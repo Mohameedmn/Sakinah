@@ -45,7 +45,7 @@ class HomeController extends GetxController {
   }
 
   void goToDuaa() {
-    Get.toNamed(AppRoute.duaa);
+ //   Get.toNamed(AppRoute.duaa);
   }
 
   void goToHome() {
@@ -53,7 +53,7 @@ class HomeController extends GetxController {
   }
 
   void goToProfile() {
-    Get.toNamed(AppRoute.Profile);
+    Get.toNamed(AppRoute.profile);
   }
 
 
@@ -78,7 +78,7 @@ class HomeController extends GetxController {
       goToQibla();
       break;
     case 4:
-      goToDuaa();
+      goToProfile();
       break;
     default:
       break;

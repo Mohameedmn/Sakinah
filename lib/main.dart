@@ -5,8 +5,7 @@ import 'package:sakinah/app/bindings/initial_binding.dart';
 import 'package:sakinah/routes/app_route.dart';
 import 'package:sakinah/routes/app_pages.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(); // Initialize Firebase
 
@@ -14,6 +13,8 @@ void main() async{
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

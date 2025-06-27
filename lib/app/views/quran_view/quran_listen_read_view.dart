@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sakinah/app/controllers/home_controller.dart';
+import 'package:sakinah/app/widgets/custom_bottom_nav_bar.dart';
 
 class ChooseModeView extends StatelessWidget {
-  const ChooseModeView({super.key});
-
+  ChooseModeView({super.key});
+  final HomeController controller = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +60,7 @@ class ChooseModeView extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: CustomBottomNavBar(controller: controller),
     );
   }
 

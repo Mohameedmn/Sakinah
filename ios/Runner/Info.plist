@@ -6,6 +6,10 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Sakinah</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to show nearby data</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location even when the app is in background</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
