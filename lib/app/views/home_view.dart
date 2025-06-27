@@ -25,7 +25,7 @@ class HomeView extends StatelessWidget {
                   () => PrayerTimeWidget(
                     nextprayertime: controller.nextPrayerTime.value,
                     hijriDate: controller.hijriDate.value,
-                    prayerName: 'Fajr',
+                    prayerName: 'maghrib',
                     time: '04:45 AM',
                     icon: Icons.wb_twilight,
                   ),

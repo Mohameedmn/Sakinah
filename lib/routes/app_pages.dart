@@ -19,7 +19,7 @@ class AppPages {
     //GetPage(name: AppRoute.quran, page: () => const QuranView()),
     GetPage(name: AppRoute.prayerTimes, page: () =>  PrayerTimeView()),
     //GetPage(name: AppRoute.duaa, page: () => const DuaaView()),
-    GetPage(name: AppRoute.qibla, page: () => const QiblaView()),
+    GetPage(name: AppRoute.qibla, page: () => QiblaView()),
     //GetPage(name: AppRoute.login, page: () => const LoginView()),
   ];
 }
