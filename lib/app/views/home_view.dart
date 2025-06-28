@@ -1,86 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sakinah/app/widgets/build_card.dart';
 import 'package:sakinah/app/widgets/custom_bottom_nav_bar.dart';
+import 'package:sakinah/app/widgets/quick_acces_tile.dart';
+import 'package:sakinah/app/widgets/reading_card.dart';
+import 'package:sakinah/app/widgets/verse_card.dart';
+import 'package:sakinah/routes/app_route.dart';
 import '../controllers/home_controller.dart';
-import '../widgets/prayer_time_widget.dart';
-import '../widgets/quran_card.dart';
-import '../widgets/feature_button.dart';
 
-class HomeView extends StatelessWidget {
-  final HomeController controller = Get.find<HomeController>();
+class HomeView extends GetView<HomeController> {
+  HomeView({super.key});
+
+    final HomeController controller = Get.find<HomeController>();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF6F2E9),
       body: SafeArea(
-        child: Column(
-          children: [
-            // Top Info Section
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 16),
-                Obx(
-                  () => PrayerTimeWidget(
-                    nextprayertime: controller.nextPrayerTime.value,
-                    hijriDate: controller.hijriDate.value,
-                    prayerName: 'maghrib',
-                    time: '04:45 AM',
-                    icon: Icons.wb_twilight,
-                  ),
-                ),
-                SizedBox(height: 20),
-              ],
-            ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Sakinah - Your Quran companion", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+              const SizedBox(height: 16),
 
-            // Feature Buttons
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              // Next Prayer
+              BuildCard(
+                title: 'Next Prayer',
+                subtitle: 'Asr',
+                time: '15:45',
+                icon: Icons.settings,
+              ),
+              const SizedBox(height: 16),
+
+              // Currently Reading
+              ReadingCard(
+                surah: 'Surah Al-Fatiha',
+                verse: 'Verse 1-7',
+              ),
+              const SizedBox(height: 24),
+
+              // Quick Access
+              const Text("Quick Access", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
                 children: [
-                  FeatureButton(
-                    icon: Icons.menu_book,
-                    label: 'Quran',
-                    onTap: controller.goToQuran,
-                  ),
-                  FeatureButton(
-                    icon: Icons.headphones,
-                    label: 'Listen',
-                    onTap: controller.goToQuran,
-                  ),
-                  FeatureButton(
-                    icon: Icons.calendar_today,
-                    label: 'Prayer time',
-                    onTap: controller.goToPrayerTime,
-                  ),
-                  FeatureButton(
-                    icon: Icons.auto_awesome,
-                    label: 'Dua',
-                    onTap: controller.goToDuaa,
-                  ),
+                  QuickAccessTile(icon :Icons.menu_book,title:  'Read Quran',subtitle:  'Continue reading',route:  AppRoute.choosemode),
+                  QuickAccessTile(icon :Icons.auto_awesome,title:  'Duaa',subtitle:  'Daily prayers',route:  AppRoute.duaa),
+                  QuickAccessTile(icon :Icons.access_time,title:  'Prayer Times',subtitle:  "Today's schedule",route:  AppRoute.prayerTimes),
+                  QuickAccessTile(icon :Icons.explore,title:  'Qibla', subtitle: 'Find direction',route:  AppRoute.qibla),
                 ],
               ),
-            ),
+              const SizedBox(height: 24),
 
-            // Main Banner or Dua Section
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(16.0),
-                children: [
-                  QuranCard(
-                    title: 'This Dua Will Change Your Life',
-                    imagePath: 'assets/images/quran_icon.png',
-                    onTap: controller.goToDuaa,
-                  ),
-                ],
-              ),
-            ),
-          ],
+              // Verse of the Day
+              VerseCard(verse: '\"And whoever relies upon Allah – then He is sufficient for him. Indeed, Allah will accomplish His purpose.\"', source: "Surah At-Talaq 65:3",),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: CustomBottomNavBar(controller: controller),
+
     );
   }
-}
+
+} 

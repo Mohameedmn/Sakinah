@@ -48,6 +48,7 @@ class PrayerTimeView extends StatelessWidget {
 
           // 🧾 Card content
           Card(
+            color: const Color(0xFFBFD8AF),
             margin: const EdgeInsets.symmetric(horizontal: 20),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -62,6 +63,7 @@ class PrayerTimeView extends StatelessWidget {
                     child: Text(
                       "Next Prayer: Asr",
                       style: TextStyle(
+                        
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -72,7 +74,7 @@ class PrayerTimeView extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Countdown: 00:15:37",
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                      style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 0, 0, 0) , fontWeight: FontWeight.w500) ,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -103,6 +105,8 @@ class PrayerTimeView extends StatelessWidget {
                       ),
                       Switch(
                         value: true,
+                        activeColor: Colors.green[400],
+                        inactiveTrackColor: Colors.grey[300],
                         onChanged: (value) {
                           // handle toggle
                         },

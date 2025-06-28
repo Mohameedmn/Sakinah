@@ -9,5 +9,6 @@ class AppRoute {
   static const String profile = '/profile';
   static const String readquran = '/read-quran';
   static const String listenQuran = '/listen-quran';
+  static const String onboarding = '/onboarding';
   
 }

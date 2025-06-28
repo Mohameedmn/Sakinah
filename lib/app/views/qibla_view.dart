@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:sakinah/app/controllers/home_controller.dart';
 import 'package:sakinah/app/widgets/custom_bottom_nav_bar.dart';
 // import 'package:flutter_compass/flutter_compass.dart';

@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Sakinah - Quran App',
       debugShowCheckedModeBanner: false,
       initialBinding: InitialBinding(), // binds controllers/services
-      initialRoute: AppRoute.home, // or login if using auth
+      initialRoute: AppRoute.onboarding, // or login if using auth
       getPages: AppPages.pages, // route management
       theme: ThemeData.light(), // or your custom theme
     );
