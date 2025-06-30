@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sakinah/app/controllers/home_controller.dart';
 import 'package:sakinah/app/services/location_services.dart';
-import 'package:sakinah/app/theme/theme.dart';
 import 'package:sakinah/app/widgets/custom_bottom_nav_bar.dart';
 import 'package:sakinah/app/widgets/profile_row.dart'; // Adjust import
 
@@ -51,7 +50,7 @@ class ProfileView extends StatelessWidget {
 
           // 🧾 Profile Info Card
           Card(
-            color: AppColors.primary ,
+            color: Colors.white ,
             margin: const EdgeInsets.symmetric(horizontal: 20),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -76,7 +75,7 @@ class ProfileView extends StatelessWidget {
                           SizedBox(width: 12),
                           Text(
                             "Notifications",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500 , color: Colors.white),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),

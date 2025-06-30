@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sakinah/app/controllers/home_controller.dart';
 import 'package:sakinah/app/services/location_services.dart';
+import 'package:sakinah/app/theme/theme.dart';
 import 'package:sakinah/app/widgets/custom_bottom_nav_bar.dart';
 import 'package:sakinah/app/widgets/prayer_row.dart';
 
@@ -48,7 +49,7 @@ class PrayerTimeView extends StatelessWidget {
 
           // 🧾 Card content
           Card(
-            color: const Color(0xFFBFD8AF),
+            color:  Colors.white,
             margin: const EdgeInsets.symmetric(horizontal: 20),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -63,7 +64,6 @@ class PrayerTimeView extends StatelessWidget {
                     child: Text(
                       "Next Prayer: Asr",
                       style: TextStyle(
-                        
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -74,7 +74,11 @@ class PrayerTimeView extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Countdown: 00:15:37",
-                      style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 0, 0, 0) , fontWeight: FontWeight.w500) ,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -89,29 +93,39 @@ class PrayerTimeView extends StatelessWidget {
                   PrayerRow(name: "Maghrib", time: "06:45 PM"),
                   const Divider(),
                   PrayerRow(name: "Isha", time: "08:15 PM"),
-                  const Divider(),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 20,),
+          Card(
+            color:  Colors.white,
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
+            elevation: 4,
+            child: Padding(
+              padding: EdgeInsetsGeometry.only(left: 15 , right: 10 , bottom: 8 , top: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Notifications",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Switch(
+                    
+                    value: true,
+                    activeColor: AppColors.primary,
+                    activeTrackColor: Colors.green[100],
+                    inactiveThumbColor: Colors.grey,
+                    
+                    inactiveTrackColor: Colors.grey[300],
+                    onChanged: (value) {
+                      
 
-                  // 🔔 Notifications switch
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Notifications",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Switch(
-                        value: true,
-                        activeColor: Colors.green[400],
-                        inactiveTrackColor: Colors.grey[300],
-                        onChanged: (value) {
-                          // handle toggle
-                        },
-                      ),
-                    ],
+                    },
                   ),
                 ],
               ),

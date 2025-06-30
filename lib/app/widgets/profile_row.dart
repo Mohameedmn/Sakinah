@@ -20,12 +20,12 @@ class ProfileRow extends StatelessWidget {
         const SizedBox(width: 12),
         Text(
           name,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500 , color: Colors.white),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500 ),
         ),
         const Spacer(),
         Text(
           value,
-          style: const TextStyle(fontSize: 16, color: Colors.white),
+          style: const TextStyle(fontSize: 16),
         ),
       ],
     );

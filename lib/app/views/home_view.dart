@@ -11,7 +11,8 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   HomeView({super.key});
 
-    final HomeController controller = Get.find<HomeController>();
+    @override
+  final HomeController controller = Get.find<HomeController>();
 
 
   @override
@@ -59,7 +60,7 @@ class HomeView extends GetView<HomeController> {
               const SizedBox(height: 24),
 
               // Verse of the Day
-              VerseCard(verse: '\"And whoever relies upon Allah – then He is sufficient for him. Indeed, Allah will accomplish His purpose.\"', source: "Surah At-Talaq 65:3",),
+              VerseCard(verse: '"And whoever relies upon Allah – then He is sufficient for him. Indeed, Allah will accomplish His purpose."', source: "Surah At-Talaq 65:3",),
             ],
           ),
         ),

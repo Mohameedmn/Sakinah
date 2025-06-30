@@ -7,10 +7,11 @@ import 'package:sakinah/routes/app_pages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // Initialize Firebase
+  await Firebase.initializeApp();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Sakinah - Quran App',
       debugShowCheckedModeBanner: false,
       initialBinding: InitialBinding(), // binds controllers/services
-      initialRoute: AppRoute.onboarding, // or login if using auth
+      initialRoute: AppRoute.home, // or login if using auth
       getPages: AppPages.pages, // route management
       theme: ThemeData.light(), // or your custom theme
     );
