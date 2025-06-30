@@ -4,6 +4,12 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>UIBackgroundModes</key>
+	<array>
+    <string>fetch</string>
+    <string>remote-notification</string>
+    <string>audio</string>
+	</array>
 	<key>CFBundleDisplayName</key>
 	<string>Sakinah</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

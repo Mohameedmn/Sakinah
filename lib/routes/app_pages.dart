@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sakinah/app/bindings/duaa_binding.dart';
+import 'package:sakinah/app/bindings/prayers_bindings.dart';
 import 'package:sakinah/app/bindings/quran_bindings.dart';
 import 'package:sakinah/app/views/duaa_view.dart';
 import 'package:sakinah/app/views/home_view.dart';
@@ -20,7 +21,7 @@ class AppPages {
     GetPage(name: AppRoute.readquran, page: () => ReadQuranPage() , binding: QuranBindings()),
     GetPage(name: AppRoute.listenQuran, page: () => ListenQuranPage()), // Replace with actual ListenQuranView
     GetPage(name: AppRoute.profile, page: () =>  ProfileView()),
-    GetPage(name: AppRoute.prayerTimes, page: () =>  PrayerTimeView()),
+    GetPage(name: AppRoute.prayerTimes, page: () =>  PrayerTimeView(), binding: PrayersBindings()),
     GetPage(name: AppRoute.duaa, page: () => DuaaView(), binding: DuaaBinding()),
     GetPage(name: AppRoute.qibla, page: () => QiblaView()),
     //GetPage(name: AppRoute.login, page: () => const LoginView()),

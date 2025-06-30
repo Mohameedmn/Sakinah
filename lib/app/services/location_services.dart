@@ -30,24 +30,28 @@ import 'package:geocoding/geocoding.dart';
     );
   }
 
-  Future<String> getProvinceAndCountry() async {
+  Future<Map<String, String>> getCityAndCountry() async {
   try {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return "Location disabled";
+    if (!serviceEnabled) throw Exception("Location services are disabled");
 
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) return "Permission denied";
+      if (permission == LocationPermission.denied) {
+        throw Exception("Location permission denied");
+      }
     }
     if (permission == LocationPermission.deniedForever) {
-      return "Permission denied forever";
+      throw Exception("Location permission permanently denied");
     }
 
+    // Get the user's current position
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
 
+    // Convert coordinates into city/country info
     List<Placemark> placemarks = await placemarkFromCoordinates(
       position.latitude,
       position.longitude,
@@ -55,12 +59,18 @@ import 'package:geocoding/geocoding.dart';
 
     if (placemarks.isNotEmpty) {
       final Placemark place = placemarks.first;
-      return "${place.administrativeArea}, ${place.country}";
+
+      final city = place.locality ?? place.subAdministrativeArea ?? place.administrativeArea ?? "Unknown";
+      final country = place.country ?? "Unknown";
+
+      return {'city': city, 'country': country};
     } else {
-      return "Unknown location";
+      throw Exception("Unable to get location details");
     }
   } catch (e) {
-    return "Error: $e";
+    throw Exception("Error: $e");
   }
 }
+
+
 
