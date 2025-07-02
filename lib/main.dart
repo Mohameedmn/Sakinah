@@ -3,9 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sakinah/app/bindings/initial_binding.dart';
-import 'package:sakinah/app/services/notification_services.dart';
 import 'package:sakinah/routes/app_route.dart';
-import 'package:sakinah/routes/app_pages.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
@@ -44,8 +42,7 @@ class MyApp extends StatelessWidget {
       title: 'Sakinah - Quran App',
       debugShowCheckedModeBanner: false,
       initialBinding: InitialBinding(), // binds controllers/services
-      initialRoute: AppRoute.home, // or login if using auth
-      getPages: AppPages.pages, // route management
+      initialRoute: AppRoute.login, // or login if using auth
       theme: ThemeData.light(), // or your custom theme
     );
   }

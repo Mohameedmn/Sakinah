@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sakinah/app/controllers/prayer_time_controller.dart';
-import 'package:sakinah/app/widgets/build_card.dart';
 import 'package:sakinah/app/widgets/custom_bottom_nav_bar.dart';
 import 'package:sakinah/app/widgets/quick_acces_tile.dart';
 import 'package:sakinah/app/widgets/reading_card.dart';
