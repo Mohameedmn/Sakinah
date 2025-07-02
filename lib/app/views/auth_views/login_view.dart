@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sakinah/app/controllers/auth_controller.dart';
 import 'package:sakinah/app/theme/theme.dart';
+import 'package:sakinah/app/views/auth_views/register_view.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
@@ -196,7 +197,7 @@ class LoginView extends StatelessWidget {
                     const Text("Don't have an account? "),
                     GestureDetector(
                       onTap: () {
-                        // TODO: Navigate to sign-up page
+                        Get.to(RegisterView());
                       },
                       child: const Text(
                         'Sign up',

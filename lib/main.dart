@@ -4,16 +4,24 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sakinah/app/bindings/initial_binding.dart';
 import 'package:sakinah/routes/app_route.dart';
+import 'package:sakinah/routes/app_pages.dart'; // Make sure this file exists and contains GetPage list
+import 'package:sakinah/routes/root_redirector.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+  await initializeNotifications(); // ✅ Call the function
+  tz.initializeTimeZones(); // ✅ Only call once
+
+  runApp(const MyApp());
+}
 
 Future<void> initializeNotifications() async {
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
   const AndroidInitializationSettings androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
   const DarwinInitializationSettings iOSInit = DarwinInitializationSettings();
 
@@ -23,15 +31,7 @@ Future<void> initializeNotifications() async {
   );
 
   await flutterLocalNotificationsPlugin.initialize(initSettings);
-  tz.initializeTimeZones(); // Required for scheduling
 }
-
-
-  tz.initializeTimeZones();
-
-  runApp(const MyApp());
-}
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -41,9 +41,10 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Sakinah - Quran App',
       debugShowCheckedModeBanner: false,
-      initialBinding: InitialBinding(), // binds controllers/services
-      initialRoute: AppRoute.login, // or login if using auth
-      theme: ThemeData.light(), // or your custom theme
+      initialBinding: InitialBinding(),
+      home: const RootRedirector(),
+      getPages: AppPages.pages, // ✅ Add this line
+      theme: ThemeData.light(),
     );
   }
 }

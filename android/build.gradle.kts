@@ -1,13 +1,3 @@
-buildscript {
-    repositories {
-        google()           // ✅ Needed to resolve Firebase plugin
-        mavenCentral()     // ✅ Always good to have
-    }
-    dependencies {
-        classpath("com.google.gms:google-services:4.4.2")
-    }
-}
-
 allprojects {
     repositories {
         google()
@@ -15,15 +5,14 @@ allprojects {
     }
 }
 
-// Keep your custom build dir logic
+// Custom build dir logic
 val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
 rootProject.layout.buildDirectory.value(newBuildDir)
 
 subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
-}
-subprojects {
+
     project.evaluationDependsOn(":app")
 
     // ✅ Apply to all Android modules that support lint
@@ -37,6 +26,7 @@ subprojects {
 
     plugins.withId("com.android.application") {
         extensions.configure<com.android.build.gradle.AppExtension>("android") {
+            // You can add app-specific config here if needed
         }
     }
 }
