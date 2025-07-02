@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -6,6 +7,12 @@ class AuthController extends GetxController {
   static AuthController instance = Get.find();
 
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  User? get user => auth.currentUser;
+  String get uid => auth.currentUser?.uid ?? '';
+
+
   Rxn<User> firebaseUser = Rxn<User>();
 
   @override
@@ -14,70 +21,90 @@ class AuthController extends GetxController {
     firebaseUser.bindStream(auth.authStateChanges());
   }
 
-  // 🔐 Email login
+  /// 🔐 Email Login
   Future<void> login(String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
-      Get.snackbar('Success', 'Logged in successfully');
-    } on FirebaseAuthException catch (e) {
-      Get.snackbar('Login Failed', e.message ?? 'Unknown error');
+      Get.offAllNamed('/home'); // ✅ navigate after login
     } catch (e) {
-      Get.snackbar('Login Failed', 'An unexpected error occurred');
+      Get.snackbar('Login Failed', e.toString());
     }
   }
 
-  // 🧾 Register
+  /// 🧾 Register with Firestore user creation
   Future<void> register(String email, String password) async {
     try {
-      await auth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      Get.snackbar('Success', 'Account created');
-    } on FirebaseAuthException catch (e) {
-      Get.snackbar('Registration Failed', e.message ?? 'Unknown error');
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        await firestore.collection('users').doc(user.uid).set({
+          'user_id': user.uid,
+          'email': user.email,
+          'language': 'en',
+          'favorites': [],
+          'last_read': {},
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+
+      Get.snackbar('✅ Success', 'Account created');
+      Get.offAllNamed('/home'); // ✅ navigate after login
     } catch (e) {
-      Get.snackbar('Registration Failed', 'An unexpected error occurred');
+      Get.snackbar('❌ Registration Failed', e.toString());
     }
   }
 
-  Future<void> logout() async {
-    try {
-      await auth.signOut();
-      await GoogleSignIn().signOut();
-      Get.snackbar('Success', 'Logged out');
-    } catch (e) {
-      Get.snackbar('Logout Failed', 'An unexpected error occurred');
-    }
-  }
-
+  /// 🔵 Google Sign-In
   Future<void> signInWithGoogle() async {
     try {
-      // 1. Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
         Get.snackbar("Cancelled", "Google sign-in was cancelled");
         return;
       }
 
-      // 2. Obtain the auth details
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
-      // 3. Create the credentials
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // 4. Sign in to Firebase
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      UserCredential userCredential = await auth.signInWithCredential(
+        credential,
+      );
+      User? user = userCredential.user;
 
-      // ✅ 5. Redirect to home
-      Get.offAllNamed('/home'); // or AppRoute.home if you use route constants
+      // Save to Firestore if new user
+      final doc = await firestore.collection('users').doc(user!.uid).get();
+      if (!doc.exists) {
+        await firestore.collection('users').doc(user.uid).set({
+          'user_id': user.uid,
+          'email': user.email,
+          'language': 'en',
+          'favorites': [],
+          'last_read': {},
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+
+      // ✅ Navigate to home page
+      Get.offAllNamed('/home');
     } catch (e) {
-      print("❌ Google Sign-In Error: $e");
-      Get.snackbar("Google Sign-In Failed", e.toString());
+      print("Google Sign-In Error: $e");
+      Get.snackbar("❌ Google Sign-In Failed", e.toString());
     }
+  }
+
+  /// 🚪 Logout
+  Future<void> logout() async {
+    await auth.signOut();
+    await GoogleSignIn().signOut(); // Also logout from Google
   }
 }
