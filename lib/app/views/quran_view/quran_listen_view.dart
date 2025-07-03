@@ -7,7 +7,7 @@ import 'package:sakinah/app/views/quran_view/quran_player_bottom_sheet.dart';
 
 class ListenQuranPage extends StatelessWidget {
   final QuranApi api = QuranApi();
-  final AudioController audioController = Get.put(AudioController());
+  final AudioController audioController = Get.find<AudioController>();
 
   ListenQuranPage({super.key});
 

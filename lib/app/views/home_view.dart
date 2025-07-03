@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sakinah/app/controllers/audio_controller.dart';
 import 'package:sakinah/app/controllers/prayer_time_controller.dart';
 import 'package:sakinah/app/widgets/custom_bottom_nav_bar.dart';
 import 'package:sakinah/app/widgets/quick_acces_tile.dart';
@@ -94,8 +95,30 @@ class HomeView extends GetView<HomeController> {
 
               const SizedBox(height: 16),
 
-              // Currently Reading
-              ReadingCard(surah: 'Surah Al-Fatiha', verse: 'Verse 1-7'),
+              FutureBuilder(
+                future: Get.find<AudioController>().getLastRead(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData || snapshot.data == null) {
+                    return const ReadingCard(
+                      surah: "You haven't played any surah",
+                      verse: "Start listening to resume later",
+                      showPlay: false,
+                    );
+                  }
+
+                  final lastRead = snapshot.data!;
+                  return GestureDetector(
+                    onTap: () => controller.resumeLastRead(),
+                    child: ReadingCard(
+                      surah: lastRead['surah'] ?? '',
+                      verse:
+                          'Verse: ${lastRead['verse_key']?.split(":").last ?? ''}',
+                      showPlay: true,
+                    ),
+                  );
+                },
+              ),
+
               const SizedBox(height: 24),
 
               // Quick Access
@@ -142,15 +165,10 @@ class HomeView extends GetView<HomeController> {
                     '"And whoever relies upon Allah – then He is sufficient for him. Indeed, Allah will accomplish His purpose."',
                 source: "Surah At-Talaq 65:3",
               ),
-              
             ],
           ),
-          
         ),
-        
       ),
-      
-      
 
       bottomNavigationBar: CustomBottomNavBar(controller: controller),
     );

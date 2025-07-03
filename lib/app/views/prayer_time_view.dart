@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sakinah/app/controllers/home_controller.dart';
 import 'package:sakinah/app/controllers/prayer_time_controller.dart';
 import 'package:sakinah/app/theme/theme.dart';
 import 'package:sakinah/app/widgets/custom_bottom_nav_bar.dart';
@@ -8,6 +9,8 @@ import 'package:sakinah/app/widgets/prayer_row.dart';
 class PrayerTimeView extends StatelessWidget {
   PrayerTimeView({super.key});
   final PrayersController controller = Get.find<PrayersController>();
+  final HomeController homecontroller = Get.find<HomeController>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -109,14 +112,20 @@ class PrayerTimeView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text("Notifications", style: TextStyle(fontSize: 16)),
-                    Switch(
-                      value: true,
-                      activeColor: AppColors.primary,
-                      activeTrackColor: Colors.green[100],
-                      inactiveThumbColor: Colors.grey,
-                      inactiveTrackColor: Colors.grey[300],
-                      onChanged: (value) {},
-                    ),
+                    Obx(
+                            () => Switch(
+                              value: homecontroller.notificationsEnabled.value,
+                              activeColor: Colors.green,
+                              onChanged: (value) {
+                                homecontroller.toggleNotifications(value);
+                                Get.snackbar(
+                                  'Notifications',
+                                  value ? 'Enabled' : 'Disabled',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
+                              },
+                            ),
+                          ),
                   ],
                 ),
               ),

@@ -50,6 +50,7 @@ dependencies:
   flutter_local_notifications: ^19.3.0
   timezone: ^0.10.1
   google_sign_in: ^5.4.4
+  just_audio_background: ^0.0.1-beta.17
   
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sakinah/app/controllers/audio_controller.dart';
 import 'package:sakinah/app/controllers/auth_controller.dart';
+import 'package:sakinah/app/services/quran_api_service.dart';
+import 'package:sakinah/app/views/quran_view/Quran_Player_Bottom_Sheet.dart';
 import 'package:sakinah/routes/app_route.dart';
 
 
@@ -111,6 +115,39 @@ class HomeController extends GetxController {
     });
     notificationsEnabled.value = value;
   }
+
+  Future<void> resumeLastRead() async {
+  final uid = authController.uid;
+  final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+  final last = doc.data()?['last_read'];
+
+  if (last != null) {
+    final surahName = last['surah'];
+    final verseKey = last['verse_key']; // example: "2:145"
+    final parts = verseKey.split(':');
+    final surahNumber = int.tryParse(parts[0]) ?? 1;
+    final ayahNumber = int.tryParse(parts[1]) ?? 1;
+
+    final quranApi = QuranApi(); // or inject it in controller
+    final ayahs = await quranApi.getSurahAudio(surahNumber);
+
+    final index = ayahs.indexWhere((a) => a.verseKey == verseKey);
+    if (index != -1) {
+      final audioController = Get.find<AudioController>();
+      audioController.playAyahs(ayahs, surahName, startIndex: index);
+
+      Get.bottomSheet(
+        const QuranPlayerBottomSheet(),
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+      );
+    } else {
+      Get.snackbar("Ayah Not Found", "Unable to resume the ayah.");
+    }
+  } else {
+    Get.snackbar("No Last Read", "You haven't listened to any surah yet.");
+  }
+}
 
 
 } 
