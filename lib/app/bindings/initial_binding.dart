@@ -6,9 +6,10 @@ import '../controllers/home_controller.dart';
 class InitialBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(HomeController());
-    Get.put(PrayersController());
-    Get.put(AuthController());
+    Get.put(AuthController(), permanent: true);
+    Get.put(HomeController(), permanent: true);
+    Get.put(PrayersController(), permanent: true);
+
     // Add other controllers/services here
   }
 }

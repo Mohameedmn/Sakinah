@@ -10,8 +10,8 @@ import 'package:sakinah/app/widgets/profile_row.dart';
 class ProfileView extends StatelessWidget {
   ProfileView({super.key});
 
-  final HomeController controller = Get.find<HomeController>();
   final AuthController authController = Get.find<AuthController>();
+  final HomeController controller = Get.find<HomeController>();
 
   Future<DocumentSnapshot<Map<String, dynamic>>> fetchUserData() {
     final uid = authController.uid;
@@ -20,6 +20,7 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.fetchNotificationSetting();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -52,19 +53,31 @@ class ProfileView extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 username.isNotEmpty ? username : "No Username",
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               FutureBuilder<Map<String, String>>(
                 future: getCityAndCountry(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Text("Locating...", style: TextStyle(color: Colors.grey));
+                    return const Text(
+                      "Locating...",
+                      style: TextStyle(color: Colors.grey),
+                    );
                   } else if (snapshot.hasError || !snapshot.hasData) {
-                    return const Text("Location error", style: TextStyle(color: Colors.red));
+                    return const Text(
+                      "Location error",
+                      style: TextStyle(color: Colors.red),
+                    );
                   } else {
                     final city = snapshot.data!['city'] ?? '';
                     final country = snapshot.data!['country'] ?? '';
-                    return Text("$city, $country", style: const TextStyle(color: Colors.grey));
+                    return Text(
+                      "$city, $country",
+                      style: const TextStyle(color: Colors.grey),
+                    );
                   }
                 },
               ),
@@ -73,10 +86,15 @@ class ProfileView extends StatelessWidget {
               Card(
                 color: Colors.white,
                 margin: const EdgeInsets.symmetric(horizontal: 20),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 elevation: 4,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 20,
+                  ),
                   child: Column(
                     children: [
                       ProfileRow(
@@ -102,20 +120,33 @@ class ProfileView extends StatelessWidget {
                         children: [
                           Row(
                             children: const [
-                              Icon(Icons.notifications_active, color: Colors.green),
+                              Icon(
+                                Icons.notifications_active,
+                                color: Colors.green,
+                              ),
                               SizedBox(width: 12),
                               Text(
                                 "Notifications",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ],
                           ),
-                          Switch(
-                            value: true,
-                            activeColor: Colors.green,
-                            onChanged: (value) {
-                              // Handle toggle
-                            },
+                          Obx(
+                            () => Switch(
+                              value: controller.notificationsEnabled.value,
+                              activeColor: Colors.green,
+                              onChanged: (value) {
+                                controller.toggleNotifications(value);
+                                Get.snackbar(
+                                  'Notifications',
+                                  value ? 'Enabled' : 'Disabled',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
+                              },
+                            ),
                           ),
                         ],
                       ),
@@ -135,12 +166,18 @@ class ProfileView extends StatelessWidget {
                     backgroundColor: Colors.redAccent,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   icon: const Icon(Icons.logout, color: Colors.white),
                   label: const Text(
                     "Logout",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),

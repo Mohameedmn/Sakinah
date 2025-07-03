@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sakinah/app/controllers/auth_controller.dart';
 import 'package:sakinah/routes/app_route.dart';
 
 
@@ -9,10 +11,16 @@ class HomeController extends GetxController {
   var currentIndex = 0.obs;
   var nextPrayerTime = ''.obs;
 
+  // RxBool for notifications
+  RxBool notificationsEnabled = true.obs;
+  final _firestore = FirebaseFirestore.instance;
+  final AuthController authController = Get.find<AuthController>();
+
   @override
   void onInit() {
     super.onInit();
     fetchHijriDate();
+    fetchNotificationSetting();
   }
 
   void fetchHijriDate() {
@@ -84,6 +92,25 @@ class HomeController extends GetxController {
   }
 }
 
+
+  Future<void> fetchNotificationSetting() async {
+    final uid = authController.uid;
+    final doc = await _firestore.collection('users').doc(uid).get();
+    if (doc.exists && doc.data()!.containsKey('notifications_enabled')) {
+      notificationsEnabled.value = doc['notifications_enabled'];
+    } else {
+      // Default value if not set in Firestore
+      notificationsEnabled.value = true;
+    }
+  }
+
+  Future<void> toggleNotifications(bool value) async {
+    final uid = authController.uid;
+    await _firestore.collection('users').doc(uid).update({
+      'notifications_enabled': value,
+    });
+    notificationsEnabled.value = value;
+  }
 
 
 } 

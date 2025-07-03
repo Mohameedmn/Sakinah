@@ -142,10 +142,16 @@ class HomeView extends GetView<HomeController> {
                     '"And whoever relies upon Allah – then He is sufficient for him. Indeed, Allah will accomplish His purpose."',
                 source: "Surah At-Talaq 65:3",
               ),
+              
             ],
           ),
+          
         ),
+        
       ),
+      
+      
+
       bottomNavigationBar: CustomBottomNavBar(controller: controller),
     );
   }

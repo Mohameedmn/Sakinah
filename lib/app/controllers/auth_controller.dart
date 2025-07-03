@@ -1,10 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sakinah/app/controllers/home_controller.dart';
 
 class AuthController extends GetxController {
-  static AuthController instance = Get.find();
+  static AuthController get instance => Get.find<AuthController>();
+  final HomeController homecontroller = Get.find<HomeController>();
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final nameController = TextEditingController();
+
+
+
+  RxBool isLoading = false.obs;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -12,13 +23,26 @@ class AuthController extends GetxController {
   User? get user => auth.currentUser;
   String get uid => auth.currentUser?.uid ?? '';
 
-
   Rxn<User> firebaseUser = Rxn<User>();
 
   @override
   void onInit() {
     super.onInit();
     firebaseUser.bindStream(auth.authStateChanges());
+    ever(firebaseUser, _handleAuthChanged);
+  }
+
+  void _handleAuthChanged(User? user) async {
+    if (user == null) {
+      Get.offAllNamed('/login');
+    } else {
+      await user.reload(); // Refresh user data
+      if (user.emailVerified) {
+        Get.offAllNamed('/home');
+      } else {
+        Get.offAllNamed('/verify');
+      }
+    }
   }
 
   /// 🔐 Email Login
@@ -31,31 +55,40 @@ class AuthController extends GetxController {
     }
   }
 
-  /// 🧾 Register with Firestore user creation
-  Future<void> register(String email, String password) async {
+  Future<void> register() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+    final name = nameController.text.trim();
+
+    if (email.isEmpty || password.isEmpty || name.isEmpty) {
+      Get.snackbar('Error', 'All fields are required.');
+      return;
+    }
+
+    isLoading.value = true;
+
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      User? user = userCredential.user;
+      final user = userCredential.user;
 
-      if (user != null) {
-        await firestore.collection('users').doc(user.uid).set({
-          'user_id': user.uid,
-          'email': user.email,
-          'language': 'en',
-          'favorites': [],
-          'last_read': {},
-          'createdAt': FieldValue.serverTimestamp(),
-        });
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+        Get.snackbar(
+          'Verify Email',
+          'A verification link has been sent to your email.',
+        );
+        Get.toNamed('/verify-email'); // Navigate to verify view
+      } else {
+        Get.snackbar('Error', 'User creation failed or already verified.');
       }
-
-      Get.snackbar('✅ Success', 'Account created');
-      Get.offAllNamed('/home'); // ✅ navigate after login
     } catch (e) {
-      Get.snackbar('❌ Registration Failed', e.toString());
+      Get.snackbar('Register Failed', e.toString());
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -87,7 +120,9 @@ class AuthController extends GetxController {
         await firestore.collection('users').doc(user.uid).set({
           'user_id': user.uid,
           'email': user.email,
+          'username': user.displayName ?? '',
           'language': 'en',
+          "notifications_enabled": true,
           'favorites': [],
           'last_read': {},
           'createdAt': FieldValue.serverTimestamp(),
@@ -106,5 +141,12 @@ class AuthController extends GetxController {
   Future<void> logout() async {
     await auth.signOut();
     await GoogleSignIn().signOut(); // Also logout from Google
+    homecontroller.currentIndex.value = 0; // Reset home controller index
+  }
+
+  void disposeControllers() {
+    emailController.dispose();
+    passwordController.dispose();
+    nameController.dispose();
   }
 }

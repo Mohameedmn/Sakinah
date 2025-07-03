@@ -12,9 +12,9 @@ class RootRedirector extends StatelessWidget {
     Future.microtask(() {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        Get.offAllNamed(AppRoute.home); // 👈 change if needed
+        Get.offAllNamed(AppRoute.home);
       } else {
-        Get.offAllNamed(AppRoute.login); // 👈 change if needed
+        Get.offAllNamed(AppRoute.login); 
       }
     });
 
