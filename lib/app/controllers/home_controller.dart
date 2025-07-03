@@ -133,40 +133,64 @@ class HomeController extends GetxController {
     });
     notificationsEnabled.value = value;
   }
-
   Future<void> resumeLastRead() async {
-    final uid = authController.uid;
-    final doc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .get();
-    final last = doc.data()?['last_read'];
+  final uid = authController.uid;
+  final doc = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(uid)
+      .get();
+  final last = doc.data()?['last_read'];
 
-    if (last != null) {
-      final surahName = last['surah'];
-      final verseKey = last['verse_key']; // example: "2:145"
-      final parts = verseKey.split(':');
-      final surahNumber = int.tryParse(parts[0]) ?? 1;
-      final ayahNumber = int.tryParse(parts[1]) ?? 1;
-
-      final quranApi = QuranApi(); // or inject it in controller
-      final ayahs = await quranApi.getSurahAudio(surahNumber);
-
-      final index = ayahs.indexWhere((a) => a.verseKey == verseKey);
-      if (index != -1) {
-        final audioController = Get.find<AudioController>();
-        audioController.playAyahs(ayahs, surahName, startIndex: index);
-
-        Get.bottomSheet(
-          const QuranPlayerBottomSheet(),
-          backgroundColor: Colors.transparent,
-          isScrollControlled: true,
-        );
-      } else {
-        Get.snackbar("Ayah Not Found", "Unable to resume the ayah.");
-      }
-    } else {
-      Get.snackbar("No Last Read", "You haven't listened to any surah yet.");
-    }
+  if (last == null) {
+    Get.snackbar("No Last Read", "You haven't listened to any surah yet.");
+    return;
   }
+
+  final verseKey = last['verse_key'];
+  final surahName = last['surah'];
+
+  if (verseKey == null || verseKey is! String || !verseKey.contains(':')) {
+    Get.snackbar("Invalid Verse Key", "Verse key is missing or malformed.");
+    return;
+  }
+
+  final parts = verseKey.split(':');
+  if (parts.length != 2) {
+    Get.snackbar("Invalid Format", "Verse key must be in format surah:ayah.");
+    return;
+  }
+
+  final surahNumber = int.tryParse(parts[0]);
+  final ayahNumber = int.tryParse(parts[1]);
+
+  if (surahNumber == null || ayahNumber == null) {
+    Get.snackbar("Parse Error", "Cannot parse surah or ayah number.");
+    return;
+  }
+
+  final quranApi = QuranApi(); // Use your actual API service
+  final ayahs = await quranApi.getSurahAudio(surahNumber);
+
+  if (ayahs.isEmpty) {
+    Get.snackbar("Surah Not Found", "No ayahs found for this surah.");
+    return;
+  }
+
+  final index = ayahs.indexWhere((a) => a.verseKey == verseKey);
+  if (index == -1) {
+    Get.snackbar("Ayah Not Found", "Unable to locate the last ayah.");
+    return;
+  }
+
+  final audioController = Get.find<AudioController>();
+  audioController.playAyahs(ayahs, surahName, startIndex: index);
+
+  Get.bottomSheet(
+    const QuranPlayerBottomSheet(),
+    backgroundColor: Colors.transparent,
+    isScrollControlled: true,
+  );
+}
+
+
 }

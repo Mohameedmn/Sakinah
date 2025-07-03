@@ -30,20 +30,20 @@ class QuranApi {
   }
 
   Future<List<AyahAudio>> getSurahAudio(int surahNumber) async {
-    final url = 'https://api.alquran.cloud/v1/surah/$surahNumber/ar.alafasy';
-    final resp = await http.get(Uri.parse(url));
-    if (resp.statusCode == 200) {
-      final data = jsonDecode(resp.body)['data']['ayahs'] as List;
-      return data
-          .map(
-            (a) => AyahAudio(
-              verseKey: a['numberInSurah'].toString(),
-              url: a['audio'] as String,
-            ),
-          )
-          .toList();
-    } else {
-      throw Exception('Failed to load audio from API');
-    }
+  final url = 'https://api.alquran.cloud/v1/surah/$surahNumber/ar.alafasy';
+  final resp = await http.get(Uri.parse(url));
+  
+  if (resp.statusCode == 200) {
+    final data = jsonDecode(resp.body)['data']['ayahs'] as List;
+    return data.map(
+      (a) => AyahAudio(
+        verseKey: '$surahNumber:${a['numberInSurah']}', // ✅ Fixed
+        url: a['audio'] as String,
+      ),
+    ).toList();
+  } else {
+    throw Exception('Failed to load audio from API');
   }
+}
+
 }

@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:http/http.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:get/get.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -63,12 +61,9 @@ class AudioController extends GetxController {
               Uri.parse(a.url),
               tag: MediaItem(
                 id: a.verseKey,
-                album: surahName,
                 title: 'Ayah ${a.verseKey}',
+                album: currentSurahName.value,
                 artist: currentReciter.value,
-                artUri: Uri.parse(
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Quran_Kareem.svg/512px-Quran_Kareem.svg.png',
-                ),
               ),
             ),
           )
@@ -107,12 +102,14 @@ class AudioController extends GetxController {
 
     final uid = Get.find<AuthController>().uid;
     await FirebaseFirestore.instance.collection('users').doc(uid).update({
-      'last_read': {
-        'surah': currentSurahName.value,
-        'verse_key': current.verseKey,
-        'timestamp': FieldValue.serverTimestamp(),
-      },
-    });
+  'last_read': {
+    'surah': currentSurahName.value,
+    'verse_key': currentAyah.value?.verseKey, // ✅ Already in '27:14' format
+    'timestamp': FieldValue.serverTimestamp(),
+  },
+});
+
+    
   }
 
   /// Playback Controls

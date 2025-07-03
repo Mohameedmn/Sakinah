@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialBinding: InitialBinding(),
       home: const RootRedirector(),
-      getPages: AppPages.pages, // ✅ Add this line
+      getPages: AppPages.pages, 
       theme: ThemeData.light(),
     );
   }

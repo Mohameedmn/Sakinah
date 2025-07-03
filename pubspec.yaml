@@ -41,7 +41,7 @@ dependencies:
   cloud_firestore: ^5.6.9
   firebase_storage: ^12.4.7
   geolocator: ^13.0.2
-  just_audio: ^0.10.4
+  just_audio: ^0.9.36
   intl: ^0.20.2
   geocoding: ^4.0.0
   flutter_compass: ^0.8.1
@@ -50,9 +50,10 @@ dependencies:
   flutter_local_notifications: ^19.3.0
   timezone: ^0.10.1
   google_sign_in: ^5.4.4
-  just_audio_background: ^0.0.1-beta.17
+  just_audio_background: ^0.0.1-beta.10
   audio_service: ^0.18.18
   flutter_cache_manager: ^3.4.1
+  audio_session: ^0.1.25
   
 dev_dependencies:
   flutter_test:
