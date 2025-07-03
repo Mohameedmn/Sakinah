@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:sakinah/app/bindings/initial_binding.dart';
 import 'package:sakinah/routes/app_route.dart';
 import 'package:sakinah/routes/app_pages.dart'; // Make sure this file exists and contains GetPage list
@@ -15,6 +16,12 @@ void main() async {
   await initializeNotifications(); // ✅ Call the function
   tz.initializeTimeZones(); // ✅ Only call once
 
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.sakinah.audio',
+    androidNotificationChannelName: 'Quran Playback',
+    androidNotificationOngoing: true,
+  );
+
   runApp(const MyApp());
 }
 
@@ -22,7 +29,8 @@ Future<void> initializeNotifications() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  const AndroidInitializationSettings androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const AndroidInitializationSettings androidInit =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
   const DarwinInitializationSettings iOSInit = DarwinInitializationSettings();
 
   const InitializationSettings initSettings = InitializationSettings(

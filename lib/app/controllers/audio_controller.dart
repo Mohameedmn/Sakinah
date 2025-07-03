@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:get/get.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:sakinah/app/controllers/auth_controller.dart';
 import 'package:sakinah/app/models/ayah_audio_model.dart';
 
@@ -57,7 +58,20 @@ class AudioController extends GetxController {
 
       final sources = ayahs
           .where((a) => a.url.isNotEmpty)
-          .map((a) => AudioSource.uri(Uri.parse(a.url)))
+          .map(
+            (a) => AudioSource.uri(
+              Uri.parse(a.url),
+              tag: MediaItem(
+                id: a.verseKey,
+                album: surahName,
+                title: 'Ayah ${a.verseKey}',
+                artist: currentReciter.value,
+                artUri: Uri.parse(
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Quran_Kareem.svg/512px-Quran_Kareem.svg.png',
+                ),
+              ),
+            ),
+          )
           .toList();
 
       final playlist = ConcatenatingAudioSource(children: sources);
@@ -67,7 +81,6 @@ class AudioController extends GetxController {
 
       isPlaying.value = true;
 
-      // Listen to playback changes
       player.positionStream.listen((pos) => position.value = pos);
       player.durationStream.listen(
         (dur) => duration.value = dur ?? Duration.zero,
@@ -80,7 +93,7 @@ class AudioController extends GetxController {
         if (index != null && index < ayahList.length) {
           currentAyahIndex.value = index;
           currentAyah.value = ayahList[index];
-          _saveLastRead(); // 👈 Save last listened ayah in Firestore
+          _saveLastRead();
         }
       });
     } catch (e) {

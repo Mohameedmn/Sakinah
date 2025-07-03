@@ -95,29 +95,29 @@ class HomeView extends GetView<HomeController> {
 
               const SizedBox(height: 16),
 
-              FutureBuilder(
-                future: Get.find<AudioController>().getLastRead(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.data == null) {
-                    return const ReadingCard(
-                      surah: "You haven't played any surah",
-                      verse: "Start listening to resume later",
-                      showPlay: false,
-                    );
-                  }
+              Obx(() {
+                final surah = controller.lastSurah.value;
+                final verse = controller.lastVerse.value;
 
-                  final lastRead = snapshot.data!;
-                  return GestureDetector(
-                    onTap: () => controller.resumeLastRead(),
-                    child: ReadingCard(
-                      surah: lastRead['surah'] ?? '',
-                      verse:
-                          'Verse: ${lastRead['verse_key']?.split(":").last ?? ''}',
-                      showPlay: true,
-                    ),
+                if (surah.isEmpty) {
+                  return ReadingCard(
+                    surah: 'No recent reading',
+                    verse: 'Start listening now',
+                    onPlay: () {
+                      Get.snackbar(
+                        'No Surah',
+                        'You have not listened to any surah yet.',
+                      );
+                    },
                   );
-                },
-              ),
+                }
+
+                return ReadingCard(
+                  surah: surah,
+                  verse: 'Verse $verse',
+                  onPlay: () => controller.resumeLastRead(),
+                );
+              }),
 
               const SizedBox(height: 24),
 

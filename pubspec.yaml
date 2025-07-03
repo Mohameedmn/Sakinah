@@ -51,6 +51,8 @@ dependencies:
   timezone: ^0.10.1
   google_sign_in: ^5.4.4
   just_audio_background: ^0.0.1-beta.17
+  audio_service: ^0.18.18
+  flutter_cache_manager: ^3.4.1
   
 dev_dependencies:
   flutter_test:
