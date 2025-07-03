@@ -35,12 +35,9 @@ class ListenQuranPage extends StatelessWidget {
                   final ayahs = await api.getSurahAudio(surah.number);
                   if (ayahs.isNotEmpty) {
                     audioController.playAyahs(ayahs, surah.englishName);
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (_) => const QuranPlayerBottomSheet(),
-                    );
+                    Get.toNamed('/now-playing'); // ✅ Navigation here now
+                  } else {
+                    Get.snackbar("Error", "Failed to load surah audio.");
                   }
                 },
 

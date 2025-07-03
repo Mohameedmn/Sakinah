@@ -10,6 +10,8 @@ class AudioController extends GetxController {
 
   final AuthController authcontroller = Get.put(AuthController());
 
+  var buffered = Duration.zero.obs;
+
   // Ayah Playlist
   var ayahList = <AyahAudio>[];
   var currentAyahIndex = 0.obs;
@@ -72,7 +74,7 @@ class AudioController extends GetxController {
       final playlist = ConcatenatingAudioSource(children: sources);
 
       await player.setAudioSource(playlist, initialIndex: startIndex);
-      player.play();
+      await player.play();
 
       isPlaying.value = true;
 
@@ -102,14 +104,12 @@ class AudioController extends GetxController {
 
     final uid = Get.find<AuthController>().uid;
     await FirebaseFirestore.instance.collection('users').doc(uid).update({
-  'last_read': {
-    'surah': currentSurahName.value,
-    'verse_key': currentAyah.value?.verseKey, // ✅ Already in '27:14' format
-    'timestamp': FieldValue.serverTimestamp(),
-  },
-});
-
-    
+      'last_read': {
+        'surah': currentSurahName.value,
+        'verse_key': currentAyah.value?.verseKey, // ✅ Already in '27:14' format
+        'timestamp': FieldValue.serverTimestamp(),
+      },
+    });
   }
 
   /// Playback Controls

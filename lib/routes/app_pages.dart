@@ -13,6 +13,7 @@ import 'package:sakinah/app/views/onboarding_view.dart';
 import 'package:sakinah/app/views/prayer_time_view.dart';
 import 'package:sakinah/app/views/profile_view.dart';
 import 'package:sakinah/app/views/qibla_view.dart';
+import 'package:sakinah/app/views/quran_view/now_playing_view.dart';
 import 'package:sakinah/app/views/quran_view/quran_listen_read_view.dart';
 import 'package:sakinah/app/views/quran_view/quran_listen_view.dart';
 import 'package:sakinah/app/views/quran_view/quran_read_view.dart';
@@ -32,5 +33,6 @@ class AppPages {
     GetPage(name: AppRoute.login, page: () =>  LoginView()),
     GetPage(name: AppRoute.onboarding, page: () => const OnboardingView()),
     GetPage(name: AppRoute.verifyEmail, page: () => VerifyEmailView()), // Uncomment if you have a VerifyEmailView
+    GetPage(name: AppRoute.nowplaying, page: () => NowPlayingView(), binding: QuranBindings()),
   ];
 }
