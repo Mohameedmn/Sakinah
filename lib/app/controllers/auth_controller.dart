@@ -7,7 +7,7 @@ import 'package:sakinah/app/controllers/home_controller.dart';
 
 class AuthController extends GetxController {
   static AuthController get instance => Get.find<AuthController>();
-  final HomeController homecontroller = Get.find<HomeController>();
+
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -141,7 +141,7 @@ class AuthController extends GetxController {
   Future<void> logout() async {
     await auth.signOut();
     await GoogleSignIn().signOut(); // Also logout from Google
-    homecontroller.currentIndex.value = 0; // Reset home controller index
+    
   }
 
   void disposeControllers() {

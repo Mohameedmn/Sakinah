@@ -159,6 +159,7 @@ class ProfileView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton.icon(
                   onPressed: () async {
+                    controller.currentIndex.value = 0; // Reset home controller index
                     await authController.logout();
                     Get.offAllNamed('/login');
                   },
