@@ -3,11 +3,10 @@ import 'package:get/get.dart';
 import 'package:sakinah/app/controllers/audio_controller.dart';
 import 'package:sakinah/app/models/surah_model.dart';
 import 'package:sakinah/app/services/quran_api_service.dart';
-import 'package:sakinah/app/views/quran_view/quran_player_bottom_sheet.dart';
+import 'package:sakinah/app/views/quran_view/play_overlay.dart';
 
 class ListenQuranPage extends StatelessWidget {
   final QuranApi api = QuranApi();
-  final AudioController audioController = Get.find<AudioController>();
 
   ListenQuranPage({super.key});
 
@@ -16,61 +15,72 @@ class ListenQuranPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(title: const Text('Listen to Quran')),
-      body: FutureBuilder<List<SurahBasic>>(
-        future: api.getSurahList(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Stack(
+        children: [
+          FutureBuilder<List<SurahBasic>>(
+            future: api.getSurahList(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          final surahs = snapshot.data!;
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: surahs.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final surah = surahs[index];
-              return GestureDetector(
-                onTap: () async {
-                  final ayahs = await api.getSurahAudio(surah.number);
-                  if (ayahs.isNotEmpty) {
-                    audioController.playAyahs(ayahs, surah.englishName);
-                    Get.toNamed('/now-playing'); // ✅ Navigation here now
-                  } else {
-                    Get.snackbar("Error", "Failed to load surah audio.");
-                  }
+              final surahs = snapshot.data!;
+              return ListView.separated(
+                padding: const EdgeInsets.all(16),
+                itemCount: surahs.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  final surah = surahs[index];
+                  return GestureDetector(
+                    onTap: () async {
+                      final audioController = Get.find<AudioController>();
+                      final ayahs = await api.getSurahAudio(surah.number);
+                      if (ayahs.isNotEmpty) {
+                        audioController.playAyahs(ayahs, surah.englishName);
+                        audioController.expandPlayer();
+                      } else {
+                        Get.snackbar("Error", "Failed to load surah audio.");
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
+                          )
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            surah.englishName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
-
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        surah.englishName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               );
             },
-          );
-        },
+          ),
+          // Overlay the player at the bottom
+          const Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: SafeArea(child: PlayerOverlay()),
+          ),
+        ],
       ),
     );
   }

@@ -9,6 +9,9 @@ import 'package:sakinah/routes/app_pages.dart'; // Make sure this file exists an
 import 'package:sakinah/routes/root_redirector.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -47,11 +50,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      scaffoldMessengerKey: scaffoldMessengerKey,
       title: 'Sakinah - Quran App',
       debugShowCheckedModeBanner: false,
       initialBinding: InitialBinding(),
       home: const RootRedirector(),
-      getPages: AppPages.pages, 
+      getPages: AppPages.pages,
       theme: ThemeData.light(),
     );
   }

@@ -1,123 +1,128 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:sakinah/app/controllers/audio_controller.dart';
+import 'package:sakinah/app/controllers/home_controller.dart';
 import 'package:sakinah/app/theme/theme.dart';
+import 'package:sakinah/app/widgets/progress_bar.dart';
 
-class NowPlayingView extends StatelessWidget {
+class NowPlayingView extends GetView<HomeController> {
   const NowPlayingView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final AudioController c = Get.find<AudioController>(); // ✅ Fix controller
+    final audioController = Get.find<AudioController>();
 
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Text('NOW PLAYING', style: Theme.of(context).textTheme.labelSmall),
-            Obx(() => Text(
-                  c.currentSurahName.value.isEmpty
-                      ? '…'
-                      : c.currentSurahName.value,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                )),
-            Obx(() {
-              final ayah = c.currentAyah.value;
-              return Expanded( 
-                child: Column(
-                  children: [
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child: Center(
-                        child: Container(
-                          width: 240,
-                          height: 240,
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(90),
-                          ),
-                          child: Image.asset(
-                            'assets/images/quran_listen_logo.png',
-                            fit: BoxFit.cover,
-                          ),
+    return GestureDetector(
+      onVerticalDragEnd: (details) {
+        if (details.primaryVelocity! > 0) {
+          audioController.collapsePlayer();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  const Text(
+                    "NOW PLAYING",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Obx(() => Text(
+                        controller.lastSurah.value,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.accent,
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        ayah?.verseKey ?? '…',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 24, fontFamily: 'Amiri'),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        'Reciter: ${c.currentReciter.value}',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Obx(() => Slider(
-                          value: c.position.value.inSeconds
-                              .clamp(0, c.duration.value.inSeconds)
-                              .toDouble(),
-                          max: (c.duration.value.inSeconds + 0.1).toDouble(),
-                          onChanged: (v) => c.seekTo(v),
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: Obx(() => Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(_fmt(c.position.value)),
-                              Text(_fmt(c.duration.value)),
-                            ],
-                          )),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.skip_previous),
-                          iconSize: 28,
-                          onPressed: c.playPrevious,
+                      )),
+                  const SizedBox(height: 2),
+                  Obx(() => Text(
+                        "Verse: ${controller.lastVerse.value}",
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
                         ),
-                        Obx(() => FloatingActionButton(
-                              heroTag: 'playpause',
-                              shape: const CircleBorder(),
-                              onPressed: c.togglePlayPause,
-                              child: Icon(c.isPlaying.value
-                                  ? Icons.pause
-                                  : Icons.play_arrow),
-                            )),
-                        IconButton(
-                          icon: const Icon(Icons.skip_next),
-                          iconSize: 28,
-                          onPressed: c.playNext,
-                        ),
-                      ],
+                      )),
+                ],
+              ),
+              Container(
+                width: 220,
+                height: 220,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: const [
+                    BoxShadow(
+                      blurRadius: 6,
+                      color: Colors.black12,
+                      offset: Offset(0, 4),
                     ),
-                    const SizedBox(height: 12),
                   ],
                 ),
-              );
-            }),
-          ],
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/images/quran_icon.png',
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Material(child: CustomProgressBar()),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.skip_previous, color: AppColors.accent),
+                    onPressed: () => audioController.playPrevious(),
+                  ),
+                  Obx(() {
+                    final isBuffering = audioController.playerState.value
+                            .processingState ==
+                        ProcessingState.buffering;
+                    final isPlaying = audioController.playerState.value.playing;
+
+                    return RawMaterialButton(
+                      onPressed: audioController.togglePlayPause,
+                      elevation: 4,
+                      shape: const CircleBorder(),
+                      fillColor: AppColors.accent,
+                      padding: const EdgeInsets.all(16),
+                      child: isBuffering
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Icon(
+                              isPlaying ? Icons.pause : Icons.play_arrow,
+                              color: Colors.white,
+                              size: 32,
+                            ),
+                    );
+                  }),
+                  IconButton(
+                    icon: Icon(Icons.skip_next, color: AppColors.accent),
+                    onPressed: () => audioController.playNext(),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  String _fmt(Duration d) {
-    String two(int n) => n.toString().padLeft(2, '0');
-    return '${two(d.inMinutes.remainder(60))}:${two(d.inSeconds.remainder(60))}';
   }
 }
