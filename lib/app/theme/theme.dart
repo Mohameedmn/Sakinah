@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Color.fromARGB(255, 65, 108, 38);  
-  static const Color secondart = Color(0xFFBFD8AF);  
+  static const Color primary = Color.fromRGBO(35, 116, 99, 1);  
+  static const Color secondary = Color.fromRGBO(122, 178, 148, 1);  
 
   static const Color background = Color(0xFFF6F2E9);     // Soft beige
   static const Color card = Colors.white;
-  static const Color accent = Color(0xFFBFD8AF);         // Light green
+  static const Color accent = Color.fromRGBO(247, 255, 242, 1);         // Light green
   static const Color textPrimary = Color(0xFF1C1C1C);    // Dark text
   static const Color textSecondary = Colors.black54;
   static const Color gray = Color(0xFFE0E0E0);           // Border/Line

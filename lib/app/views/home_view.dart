@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sakinah/app/controllers/audio_controller.dart';
 import 'package:sakinah/app/controllers/prayer_time_controller.dart';
+import 'package:sakinah/app/theme/theme.dart';
 import 'package:sakinah/app/widgets/custom_bottom_nav_bar.dart';
 import 'package:sakinah/app/widgets/quick_acces_tile.dart';
 import 'package:sakinah/app/widgets/reading_card.dart';
@@ -10,184 +11,231 @@ import 'package:sakinah/routes/app_route.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
-  HomeView({super.key});
+  const HomeView({super.key});
 
   @override
-  final HomeController controller = Get.find<HomeController>();
-  final PrayersController prayersController = Get.find<PrayersController>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F2E9),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+        child: Padding(
+          padding: EdgeInsets.only(left: 16, right: 16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Sakinah - Your Quran companion",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(60),
+                        ),
+                        child: Image.asset(
+                          'assets/images/profile_icon.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(width: 26),
 
-              Obx(() {
-                final name = prayersController.nextPrayerName.value;
-                final time =
-                    prayersController.getPrayerTimesMap()[name] ?? '--:--';
-                final bgImage = getBackgroundImageForPrayer(name);
-
-                return Container(
-                  width: double.infinity,
-                  height: 140, // slightly reduced height
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 8,
-                  ), // removed horizontal margin
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Image.asset(bgImage, fit: BoxFit.cover),
-                        Container(color: Colors.black.withOpacity(0.25)),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 10,
-                          ), // 👈 smaller padding
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                      Column(
+                        children: [
+                          Row(
                             children: [
-                              const Text(
-                                "Next Prayer",
+                              Icon(
+                                Icons.location_on,
+                                color:
+                                    AppColors.primary, // Use your primary color
+                                size: 14,
+                              ),
+                              Text(
+                                "Current Location",
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                name,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                time,
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 14,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey[600],
                                 ),
                               ),
                             ],
                           ),
+
+                          Text(
+                            "Alger , Algeria",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => {},
+                        icon: Icon(
+                          Icons.search,
+                          color: AppColors.primary,
+                          size: 25,
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-
-              const SizedBox(height: 16),
-
-              Obx(() {
-                final surah = controller.lastSurah.value;
-                final verse = controller.lastVerse.value;
-
-                if (surah.isEmpty) {
-                  return ReadingCard(
-                    surah: 'No recent reading',
-                    verse: 'Start listening now',
-                    onPlay: () {
-                      Get.snackbar(
-                        'No Surah',
-                        'You have not listened to any surah yet.',
-                      );
-                    },
-                  );
-                }
-
-                return ReadingCard(
-                  surah: surah,
-                  verse: 'Verse $verse',
-                  onPlay: () => controller.resumeLastRead(),
-                );
-              }),
-
-              const SizedBox(height: 24),
-
-              // Quick Access
-              const Text(
-                "Quick Access",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: [
-                  QuickAccessTile(
-                    icon: Icons.menu_book,
-                    title: 'Read Quran',
-                    subtitle: 'Continue reading',
-                    route: AppRoute.choosemode,
-                  ),
-                  QuickAccessTile(
-                    icon: Icons.auto_awesome,
-                    title: 'Duaa',
-                    subtitle: 'Daily prayers',
-                    route: AppRoute.duaa,
-                  ),
-                  QuickAccessTile(
-                    icon: Icons.access_time,
-                    title: 'Prayer Times',
-                    subtitle: "Today's schedule",
-                    route: AppRoute.prayerTimes,
-                  ),
-                  QuickAccessTile(
-                    icon: Icons.explore,
-                    title: 'Qibla',
-                    subtitle: 'Find direction',
-                    route: AppRoute.qibla,
+                      ),
+                      IconButton(
+                        onPressed: () => {},
+                        icon: Icon(
+                          Icons.list_rounded,
+                          color: AppColors.primary,
+                          size: 25,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
-
-              // Verse of the Day
-              VerseCard(
-                verse:
-                    '"And whoever relies upon Allah – then He is sufficient for him. Indeed, Allah will accomplish His purpose."',
-                source: "Surah At-Talaq 65:3",
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Dhu al-hijjah 9, 1445 AH",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // Navigate to nearest mosque page
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        "Nearest Mosque",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 16),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    height: 200,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColors.primary, AppColors.secondary],
+                        begin: Alignment.topLeft,
+                        end: Alignment.topRight,
+                      ),
+                      borderRadius: BorderRadius.circular(35),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Left text block
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "12:41",
+                                style: TextStyle(
+                                  fontSize: 44,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "Duhr Prayer Time",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                "Next Prayer is in 01:15",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 120), // space for the image
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Positioned(
+                    bottom: -60,
+                    right: -35,
+                    top: -55,
+                    child: Container(
+                      width: 280,
+                      height: 280,
+                      decoration: BoxDecoration(shape: BoxShape.circle),
+                      child: Image.asset(
+                        'assets/images/mosque.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.primary, width: 2),
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.white,
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Set Ramadhan Routine",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Icon(
+                        Icons.calendar_month,
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 8),
             ],
           ),
         ),
       ),
-
-      bottomNavigationBar: CustomBottomNavBar(controller: controller),
     );
-  }
-}
-
-String getBackgroundImageForPrayer(String prayer) {
-  switch (prayer.toLowerCase()) {
-    case 'fajr':
-      return 'assets/images/fajr_image.jpg';
-    case 'dhuhr':
-      return 'assets/images/duhr_image.jpg';
-    case 'asr':
-      return 'assets/images/asr_image.jpg';
-    case 'maghrib':
-      return 'assets/images/maghrib_image.jpg';
-    case 'isha':
-      return 'assets/images/ishaa_image.jpg';
-    default:
-      return 'assets/images/fajr_image.jpg';
   }
 }
