@@ -263,7 +263,7 @@ class HomeView extends GetView<HomeController> {
                             children: [
                               Row(
                                 children: [
-                                  Icon(FontAwesomeIcons.quran),
+                                  Icon(Icons.menu_book_outlined),
                                   SizedBox(width: 8),
                                   Text(
                                     "Daily Dua ",
