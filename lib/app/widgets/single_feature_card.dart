@@ -18,7 +18,7 @@ class SingleFeatureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => ontap,
+      onTap: ontap,
       child: Column(
         children: [
           FaIcon(icon, size: 20),

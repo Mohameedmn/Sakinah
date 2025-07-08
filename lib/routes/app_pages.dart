@@ -5,6 +5,7 @@ import 'package:sakinah/app/bindings/initial_binding.dart';
 import 'package:sakinah/app/bindings/prayers_bindings.dart';
 import 'package:sakinah/app/bindings/profile_binding.dart';
 import 'package:sakinah/app/bindings/quran_bindings.dart';
+import 'package:sakinah/app/views/Ramadhan_routine_view.dart';
 import 'package:sakinah/app/views/auth_views/login_view.dart';
 import 'package:sakinah/app/views/auth_views/verify_email_view.dart';
 import 'package:sakinah/app/views/duaa_view.dart';
@@ -34,5 +35,7 @@ class AppPages {
     GetPage(name: AppRoute.onboarding, page: () => const OnboardingView()),
     GetPage(name: AppRoute.verifyEmail, page: () => VerifyEmailView()), // Uncomment if you have a VerifyEmailView
     GetPage(name: AppRoute.nowplaying, page: () => NowPlayingView(), binding: QuranBindings()),
+    GetPage(name: AppRoute.ramadhanRoutine, page: () => RamadhanRoutineView()),
+    
   ];
 }

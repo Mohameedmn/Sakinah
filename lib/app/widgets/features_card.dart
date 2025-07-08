@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/route_manager.dart';
 import 'package:sakinah/app/theme/theme.dart';
+import 'package:sakinah/app/views/Ramadhan_routine_view.dart';
+import 'package:sakinah/routes/app_route.dart';
 
 import 'single_feature_card.dart';
 
@@ -19,7 +22,6 @@ class FeaturesCard extends StatelessWidget {
         child: Column(
           children: [
             Row(
-
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SingleFeatureCard(
@@ -28,12 +30,16 @@ class FeaturesCard extends StatelessWidget {
                   title: "Last Read",
                 ),
                 SingleFeatureCard(
-                  icon: FontAwesomeIcons.accessibleIcon,
-                  ontap: () => {},
+                  icon: FontAwesomeIcons.bookOpen,
+                  ontap: () {
+                    print("Navigating to Ramadan Routine");
+                    Get.toNamed(AppRoute.ramadhanRoutine);
+                  },
+
                   title: "Quran",
                 ),
                 SingleFeatureCard(
-                  icon: Icons.compass_calibration,
+                  icon: FontAwesomeIcons.compass,
                   ontap: () => {},
                   title: "Qibla",
                 ),

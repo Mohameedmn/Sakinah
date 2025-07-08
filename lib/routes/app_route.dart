@@ -12,5 +12,7 @@ class AppRoute {
   static const String onboarding = '/onboarding';
   static const String verifyEmail = '/verify-email';
   static const String nowplaying = '/now-playing';
+  static const String ramadhanRoutine = '/ramadan-routine';
+
   
 }
