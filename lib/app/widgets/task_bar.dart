@@ -14,7 +14,7 @@ class TaskBar extends StatelessWidget {
   final String title;
   final String timeDebut;
   final String timeEnd;
-  final bool isSkipped ;
+  final bool isSkipped;
   final bool isDone;
 
   Color get firstColor {
@@ -42,42 +42,56 @@ class TaskBar extends StatelessWidget {
     return InkWell(
       onTap: () {},
       child: Container(
-        padding: EdgeInsets.only(
-          right: 16,
-          left: 16,
-          top: 8
-        ),
+        
+        height: 65,
+        padding: EdgeInsets.all(11),
         decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color:  Colors.grey,
+              blurRadius: .7,
+              offset: Offset.zero,
+
+          ),
+          ],
           borderRadius: BorderRadius.circular(15),
           gradient: LinearGradient(
+            
             colors: [firstColor, secondColor],
             begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            end: Alignment.bottomRight,
           ),
+          
         ),
 
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(width: 5),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: TextStyle(fontSize: 18, color: isDone ? Colors.white : Colors.black),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: isDone ? Colors.white : Colors.black,
+                  ),
                 ),
-                SizedBox(height: 5),
                 Text(
                   "$timeDebut - $timeEnd",
-                  style: TextStyle(fontSize: 18, color: isDone ? Colors.white : Colors.black),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isDone ? Colors.white : Colors.black,
+                  ),
                 ),
               ],
             ),
-            SizedBox(width: 5),
-
+            
+            isSkipped? Icon(Icons.pause_circle_outlined ,color: Colors.white)
+            :
             isDone
                 ? Icon(Icons.check_circle, color: Colors.white)
-                : Icon(Icons.circle_outlined, color: Colors.white),
+                : Icon(Icons.circle_outlined, color: Colors.grey),
           ],
         ),
       ),
