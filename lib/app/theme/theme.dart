@@ -9,7 +9,7 @@ class AppColors {
   static const Color accent = Color.fromRGBO(247, 255, 242, 1);         // Light green
   static const Color textPrimary = Color(0xFF1C1C1C);    // Dark text
   static const Color textSecondary = Colors.black54;
-  static const Color gray = Color(0xFFE0E0E0);           // Border/Line
+  static const Color grayFont = Color.fromRGBO(136, 140, 141, 1);           // Border/Line
 }
 
 class AppTextStyles {

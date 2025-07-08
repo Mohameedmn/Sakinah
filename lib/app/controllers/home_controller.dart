@@ -92,10 +92,10 @@ class HomeController extends GetxController {
       case 2:
         goToPrayerTime();
         break;
-      case 3:
+      case 4:
         goToQibla();
         break;
-      case 4:
+      case 3:
         goToProfile();
         break;
       default:
