@@ -55,6 +55,7 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   audio_session: ^0.1.25
   font_awesome_flutter: ^10.8.0
+  flutter_polygon: ^0.3.0+2
   
 dev_dependencies:
   flutter_test:
