@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sakinah/app/controllers/audio_controller.dart';
-import 'package:sakinah/app/theme/theme.dart';
 
 class NowPlayingView extends StatelessWidget {
   const NowPlayingView({super.key});

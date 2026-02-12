@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sakinah/app/bindings/auth_binding.dart';
 import 'package:sakinah/app/bindings/duaa_binding.dart';
-import 'package:sakinah/app/bindings/initial_binding.dart';
 import 'package:sakinah/app/bindings/prayers_bindings.dart';
 import 'package:sakinah/app/bindings/profile_binding.dart';
 import 'package:sakinah/app/bindings/quran_bindings.dart';

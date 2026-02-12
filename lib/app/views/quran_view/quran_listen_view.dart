@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:sakinah/app/controllers/audio_controller.dart';
 import 'package:sakinah/app/models/surah_model.dart';
 import 'package:sakinah/app/services/quran_api_service.dart';
-import 'package:sakinah/app/views/quran_view/quran_player_bottom_sheet.dart';
 
 class ListenQuranPage extends StatelessWidget {
   final QuranApi api = QuranApi();

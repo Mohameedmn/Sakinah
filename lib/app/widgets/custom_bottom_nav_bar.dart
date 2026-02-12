@@ -12,7 +12,7 @@ class CustomBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
-        height: 88,
+        height: 92,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -33,9 +33,7 @@ class CustomBottomNavBar extends StatelessWidget {
           onTap: controller.changeTabIndex,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.white,
-          selectedIconTheme: IconThemeData(
-            size: 30
-          ),
+          selectedIconTheme: IconThemeData(size: 24),
           type: BottomNavigationBarType.fixed,
           items: const [
             BottomNavigationBarItem(

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:sakinah/app/bindings/initial_binding.dart';
-import 'package:sakinah/routes/app_route.dart';
 import 'package:sakinah/routes/app_pages.dart'; // Make sure this file exists and contains GetPage list
 import 'package:sakinah/routes/root_redirector.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -13,8 +12,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  await initializeNotifications(); // ✅ Call the function
-  tz.initializeTimeZones(); // ✅ Only call once
+  await initializeNotifications(); 
+  tz.initializeTimeZones(); 
 
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.sakinah.audio',

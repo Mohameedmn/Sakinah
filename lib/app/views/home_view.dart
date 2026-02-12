@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:sakinah/app/controllers/audio_controller.dart';
-import 'package:sakinah/app/controllers/prayer_time_controller.dart';
 import 'package:sakinah/app/theme/theme.dart';
 import 'package:sakinah/app/widgets/Dua_card.dart';
 import 'package:sakinah/app/widgets/custom_bottom_nav_bar.dart';
 import 'package:sakinah/app/widgets/features_card.dart';
-import 'package:sakinah/app/widgets/quick_acces_tile.dart';
-import 'package:sakinah/app/widgets/reading_card.dart';
-import 'package:sakinah/app/widgets/verse_card.dart';
-import 'package:sakinah/routes/app_route.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
